@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Ad;
+use App\Form\AdType;
 use App\Repository\AdRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdController extends AbstractController
@@ -21,6 +23,52 @@ class AdController extends AbstractController
             'ads' => $ads
         ]);
     }
+
+     /**
+     * Permet de créer une annonce
+     * @Route("/ads/new", name="ads_create")
+     */
+
+    public function create(){
+        /*
+        Instantiation d'une annonce
+        */ 
+        $ad = new Ad();
+        /*
+        1) création d'un formulaire basé sur les champs de l'Entity Ad
+        le FormBuilder adapte le type de champ à la propriété correspondante
+         
+        $form = $this->createFormBuilder($ad)
+                     ->add('title')
+                     ->add('introduction')
+                     ->add('content')
+                     ->add('rooms')
+                     ->add('price')
+                     ->add('coverImage')
+                     /*création d'un bouton de validation si celui-ci n'est pas ajouté dans TWIG 
+                     ->add('save', SubmitType::class, [
+                         'label' => 'Créer la nouvelle annonce',
+                         'attr' => [
+                             'class' => 'btn btn-primary'
+
+                         ]
+                     ])
+                     ->getForm();
+                    /* Pour éviter de surcharger le Controller avec les attributs du formulaire, on créé
+                     une classe dédiée à nos formulaire par php bin/console make:form */
+
+        /* 2) appel d'une classe de formulaire */
+
+        $form = $this->createForm(AdType::class, $ad);
+
+        return $this->render('ad/new.html.twig',[
+                'form' => $form->createView()
+        ]);
+
+    }
+
+
+
 
     /**
      * @Route("ads/{slug}", name="ads_show")
@@ -48,6 +96,8 @@ class AdController extends AbstractController
         ]);
 
     }
+
+   
 
 }
 

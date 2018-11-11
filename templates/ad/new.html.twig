@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Création d'une annonce {% endblock %} 
+
+{# Méthode avec un thème Symfony bootstrap 4. Il faut configurer le fichier config/packages/twig.yaml avec la ligne
+form_themes: ['bootstrap_4_layout.html.twig']
+ #}
+
+{% block body %}
+
+<div class="container">
+
+<div class="card col-md-8">
+        <div class="card-header card-header-icon card-header-rose">
+          <div class="card-icon">
+            <i class="material-icons">perm_identity</i>
+          </div>
+          <h4 class="card-title">Créer une nouvelle annonce
+          </h4>
+        </div>
+        <div class="card-body">
+         
+         {{ form_start(form) }}
+   
+            {{ form_widget(form) }}
+
+              
+            <button type="submit" class="btn btn-rose pull-right">Créer une nouvelle annonce</button>
+            <div class="clearfix"></div>
+
+           {{ form_end(form)}}
+        </div>
+      </div>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+{# permet de spécifier à TWIG qu'il doit utiliser un thème de formulaire. Celui ci est défini par _self lorsque le 
+paramétrage se trouve au sein du même fichier ou bien on défini le chemin {% form_theme form 'partials/theme/html.twig' %} 
+
+{% form_theme form _self %}
+
+{%  block body %}
+
+    <div class="container">
+        <h1>Créer une nouvelle annonce</h1>
+    {# créer le début du formulaire passé en paramètre (création de la balise form et de la méthode) 
+    {{ form_start(form)}}
+
+    <div class="form-group">
+    {{ form_label(form.title)}}
+    {#  ajoute les champs du formulaire et permet de personnaliser celui-ci et d'ajouter du code 
+
+    {{ form_widget(form.title, {'attr': {'class':'form-control', 'placeholder': 'Titre de l\'annonce'}}) }}
+    
+    {# on peut utiliser les thèmes de symfony pour définir comment les champs s'affichent 
+
+    </div>
+
+    {#  nous pouvons sélectionner que les champs que nous souhaitons afficher avec la désignation des champs.
+     {{form_widget(form.title)}} par exemple n'affiche que le champ title 
+     {{form_row(form.title)}} affiche le widget mais aussi le label ainsi que les erreurs pour un champ
+     {{form_label(form.title)}} n'affiche que le label
+                                                                        
+
+    <button type="submit" class="btn btn-primary">Créer la nouvelle annonce</button>
+
+     {#  créer la fin du formulaire et affiche les champs du formulaire qui n'ont pas été affichés 
+    {{ form_end(form)}}
+
+     {# les 3 fonctions twig de formulaire peuvent être remplacées par la fonction {{ form(form) }}
+    dans ce cas, le boutton de soumission est ajouté dans le controller 
+</div>
+
+{%  endblock %}
+
+{# personnalisation du form_row
+
+{% block form_row %}
+    {# le form ici ne représente pas le formulaire form mais le champ du formulaire 
+    <div class="form-group">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+
+    </div>
+{% endblock %}
+
+{% block text_widget %}
+ <input type="text" name="{{full_name}}" id="{{id}}" class="form-control">
+
+{% endblock %}
+
+{# cela fait trop de champs à personnaliser pour créer un thème #}
+
+
