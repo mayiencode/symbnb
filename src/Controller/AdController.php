@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Ad;
 use App\Form\AdType;
+use App\Entity\Image;
 use App\Repository\AdRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -29,11 +32,13 @@ class AdController extends AbstractController
      * @Route("/ads/new", name="ads_create")
      */
 
-    public function create(){
+    public function create(Request $request, ObjectManager $manager){
         /*
         Instantiation d'une annonce
         */ 
         $ad = new Ad();
+        
+    
         /*
         1) création d'un formulaire basé sur les champs de l'Entity Ad
         le FormBuilder adapte le type de champ à la propriété correspondante
@@ -61,9 +66,38 @@ class AdController extends AbstractController
 
         $form = $this->createForm(AdType::class, $ad);
 
+        /* utilisation de Request */
+        /* handlerequest permet de parcourir la requête et de relier toutes les informations du
+        formulaire aux champ du formulaire $ad */
+        $form->handleRequest($request);
+
+        
+                            
+        if($form->isSubmitted() && $form->isValid()){
+
+            $manager->persist($ad);
+            $manager->flush();
+            
+        /* Permet d'ajouter un message lorsque le formulaire est soumis et validé
+            Il faut pour cela utiliser la variable App dans TWIG*/
+            $this->addFlash(
+                'success',
+                "L'annonce <strong>{$ad->getTitle()}</strong>a bien été enregistrée !"
+            );
+            
+
+        /* Redirige vers la route désignée lorsque le formulaire est soumis et validé 
+        ici, on redirige vers la page d'affichage de l'annonce que nous venons de créer
+        en passant le paramètre slug correspondant à celui qui vient d'être créé */
+            return $this->redirectToRoute('ads_show', [
+                'slug' => $ad->getSlug()
+            ]);
+
+        }
+
         return $this->render('ad/new.html.twig',[
-                'form' => $form->createView()
-        ]);
+            'form' => $form->createView()
+    ]);        
 
     }
 

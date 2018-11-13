@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Ad;
+use App\Form\ImageType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class AdType extends AbstractType
 {
@@ -52,12 +54,45 @@ class AdType extends AbstractType
             /*plutôt que de faire les répétitions pour chaque champ, nous allons créer une fonction pour automatiser la tâche
             la fonction créé est getConfiguration($label, $placeholder)
             */
-            ->add('coverImage', UrlType::class, $this->getConfiguration('URL de l\'image principale'))
-            ->add('introduction', TextType::class, $this->getConfiguration('Introduction'))
-            ->add('content', TextareaType::class, $this->getConfiguration('Description détaillée'))
-            ->add('rooms', IntegerType::class, $this->getConfiguration('Nombre de chambres'))
-            ->add('price', MoneyType::class, $this->getConfiguration('Prix par nuit'))    
+            ->add(
+                'coverImage',
+                 UrlType::class,
+                  $this->getConfiguration('URL de l\'image principale')
+                  )
+            ->add(
+                'introduction',
+                 TextType::class,
+                  $this->getConfiguration('Introduction')
+                  )
+            ->add(
+                'content',
+                 TextareaType::class,
+                  $this->getConfiguration('Description détaillée')
+                  )
+            ->add(
+                'rooms',
+                 IntegerType::class,
+                  $this->getConfiguration('Nombre de chambres')
+                  )
+            ->add(
+                'price',
+                 MoneyType::class,
+                  $this->getConfiguration('Prix par nuit')
+                  )   
+                
+                /* Création de champs de type collectionType pour l'ajout d'images multiples */
+            ->add(
+                'images',
+                CollectionType::class,
+                [
+                    'entry_type' => ImageType::class,
+                    /* cette option permet de rajouter de nouveaux éléments dans la Collection */
+                    'allow_add' => true
+                ]
+            )
+                
             ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -2,6 +2,11 @@
 
 {% block title %} Création d'une annonce {% endblock %} 
 
+
+{% form_theme form _self %}
+
+
+
 {# Méthode avec un thème Symfony bootstrap 4. Il faut configurer le fichier config/packages/twig.yaml avec la ligne
 form_themes: ['bootstrap_4_layout.html.twig']
  #}
@@ -22,19 +27,89 @@ form_themes: ['bootstrap_4_layout.html.twig']
          
          {{ form_start(form) }}
    
-            {{ form_widget(form) }}
+         {{ form_widget(form) }}
 
-              
-            <button type="submit" class="btn btn-rose pull-right">Créer une nouvelle annonce</button>
-            <div class="clearfix"></div>
+        <button type="submit" class="btn btn-rose pull-right">Créer une nouvelle annonce</button>
+        <div class="clearfix"></div>
 
-           {{ form_end(form)}}
+        {{ form_end(form)}}
+
         </div>
       </div>
 
 </div>
 
 {% endblock %}
+
+{#[nom]_widget permet de modifier la sortie de form_widget sur un champ donné, ici sur l'image de l'annonce 
+C'est un theme personnalisé de TWIG qu'il faut déclarer ({% form_theme form _self %}) #}
+{% block _ad_images_widget %}
+
+    <p>Ici, vous pouvez ajouter vos propres images</p>
+    {#la variable form représente uniquement le champ image du formulaire #}
+    {{form_widget(form)}}
+    <div class="form-group">
+        <button type="button" id="add-image" class="btn btn-primary">Ajouter une image</button>
+    </div>
+
+{% endblock %}
+
+
+{% block _ad_images_entry_row %}
+
+{{form_widget(form)}}
+
+{% endblock %}
+
+
+
+
+{# les entry représente un élément de la CollectionType #}
+{% block _ad_images_entry_widget %}
+    <div class="form-group">
+        <div class="row">
+         <div class="col">
+        {# la variable form représente une entry donc soit url soit caption #}
+            {{form_widget(form.url)}}
+        </div>
+        <div class="col">
+            {{form_widget(form.caption)}}
+        </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{# on créer le code javasript permettant de créer les formulaires d'ajout d'image en temps réel #}
+{% block javascripts %}
+
+<script>
+
+$('#add-image').click(function(){
+
+// Je récupère le numéro des futurs champs que je vais créer
+const index = $('#ad_images div.form-group').length;
+
+// Je récupère le prototype des entrées
+const tmpl = $('#ad_images').data('prototype').replace(/__name__/g, index);
+
+
+// J'injecte ce code au sein de la DIV
+$('#ad_images').append(tmpl);
+});
+
+
+</script>
+
+
+
+{% endblock %}
+
+
+
+
+
+
 
 
 
