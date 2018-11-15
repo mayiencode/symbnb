@@ -19,19 +19,22 @@ class AdType extends AbstractType
 
     /**
      * Permet d'avoir la configuration de base d'un champ
+     * $options permet de passer un tableau d'options dans la function
      *
      * @param string $label
      * @param string $placeholder
+     * @param array $options
      * @return array
+     * 
      */
-    public function getConfiguration($label) {
+    public function getConfiguration($label, $options = []) {
 
-        return [
+        return array_merge([
             'label' => $label,
             'label_attr' =>[
                 'class' => 'bmd-label-floating'
             ]
-            ];
+            ], $options);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -40,6 +43,7 @@ class AdType extends AbstractType
         
             ->add('title', TextType::class, [
                 'label' => 'Titre',
+                
                 'label_attr' => [
                     'class' => 'bmd-label-floating'
                     
@@ -47,6 +51,7 @@ class AdType extends AbstractType
             ])
             ->add('slug', TextType::class, [
                 'label' => 'Slug de votre annonce',
+                'required' => false,
                 'label_attr' => [
                 'class' => 'bmd-label-floating'
                 ]

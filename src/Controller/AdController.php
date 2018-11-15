@@ -75,6 +75,12 @@ class AdController extends AbstractController
                             
         if($form->isSubmitted() && $form->isValid()){
 
+        /* permet de persister toutes les images du CollectionType des images */
+            foreach($ad->getImages() as $image) {
+                $image->setAd($ad);
+                $manager->persist($image);
+            }
+
             $manager->persist($ad);
             $manager->flush();
             
