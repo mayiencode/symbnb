@@ -137,7 +137,53 @@ class AdController extends AbstractController
 
     }
 
-   
+    /**
+     * Permet d'afficher le formulaire d'édition d'une annonce
+     * @Route("/ads/{slug}/edit", name="ads_edit")
+     *
+     * @return Response
+     */
+   public function edit(Ad $ad, Request $request, ObjectManager $manager){
+
+    $form = $this->createForm(AdType::class, $ad);
+
+    $form->handleRequest($request);
+
+    if($form->isSubmitted() && $form->isValid()){
+
+        /* permet de persister toutes les images du CollectionType des images */
+            foreach($ad->getImages() as $image) {
+                $image->setAd($ad);
+                $manager->persist($image);
+            }
+
+            $manager->persist($ad);
+            $manager->flush();
+            
+        /* Permet d'ajouter un message lorsque le formulaire est soumis et validé
+            Il faut pour cela utiliser la variable App dans TWIG*/
+            $this->addFlash(
+                'success',
+                "L'annonce <strong>{$ad->getTitle()}</strong>a bien été modifiée !"
+            );
+            
+            return $this->redirectToRoute('ads_show', [
+                'slug' => $ad->getSlug()
+            ]);
+            }
+
+    return $this->render('ad/edit.html.twig', [
+
+        'form' => $form->createView(),
+        'ad' => $ad
+
+    ]);
+
+
+
+
+
+   }
 
 }
 

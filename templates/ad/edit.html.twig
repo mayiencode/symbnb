@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edition d'une annonce{% endblock %}
+
+{% form_theme form 'ad/_collection.html.twig' %}
+
+{% block body %}
+
+<div class="container">
+
+<div class="card col-md-8">
+        <div class="card-header card-header-icon card-header-rose">
+          <div class="card-icon">
+            <i class="material-icons">perm_identity</i>
+          </div>
+          <h4 class="card-title">Modifer une annonce
+          </h4>
+        </div>
+        <div class="card-body">
+         
+         {{ form_start(form) }}
+   
+         {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-rose pull-right">Modifier une annonce</button>
+        <div class="clearfix"></div>
+
+        {{ form_end(form)}}
+
+        </div>
+      </div>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+{# on créer le code javasript permettant de créer les formulaires d'ajout d'image en temps réel #}
+{% block javascripts %}
+
+<script src="/js/ad.js"></script>
+
+{% endblock %}
+
+
+
+

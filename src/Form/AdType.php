@@ -92,7 +92,9 @@ class AdType extends AbstractType
                 [
                     'entry_type' => ImageType::class,
                     /* cette option permet de rajouter de nouveaux éléments dans la Collection */
-                    'allow_add' => true
+                    'allow_add' => true,
+                    /* autorise la suppression de champs dans le CollectionType */
+                    'allow_delete' => true
                 ]
             )
                 

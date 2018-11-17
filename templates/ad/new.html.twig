@@ -3,7 +3,7 @@
 {% block title %} Création d'une annonce {% endblock %} 
 
 
-{% form_theme form _self %}
+{% form_theme form 'ad/_collection.html.twig' %}
 
 
 
@@ -41,99 +41,13 @@ form_themes: ['bootstrap_4_layout.html.twig']
 
 {% endblock %}
 
-{#[nom]_widget permet de modifier la sortie de form_widget sur un champ donné, ici sur l'image de l'annonce 
-C'est un theme personnalisé de TWIG qu'il faut déclarer ({% form_theme form _self %}) #}
-{% block _ad_images_widget %}
 
-    <p>Ici, vous pouvez ajouter vos propres images</p>
-    {#la variable form représente uniquement le champ image du formulaire #}
-    {{form_widget(form)}}
-
-    {# permet d'attribuer le bon id à chaque formulaire d'ajout d'image créé#}
-    <input type="hidden" id="widgets-counter" value="0">
-
-
-
-    <div class="form-group">
-        <button type="button" id="add-image" class="btn btn-primary">Ajouter une image</button>
-    </div>
-
-{% endblock %}
-
-
-{% block _ad_images_entry_row %}
-
-{{form_widget(form)}}
-
-{% endblock %}
-
-
-
-
-{# les entry représente un élément de la CollectionType #}
-{% block _ad_images_entry_widget %}
-    <div class="form-group" id="block_{{id}}">
-        <div class="row">
-            <div class="col-10">
-                <div class="row">
-                    <div class="col">
-        {# la variable form représente une entry donc soit url soit caption #}
-            {{form_widget(form.url)}}
-                    </div>
-                        <div class="col">
-            {{form_widget(form.caption)}}
-                        </div>
-                </div>
-            </div>
-        <div class="col-2">
-    <button type="button" data-action="delete" data-target="#block_{{id}}" class="btn btn-danger">X</button>
-        </div>
-        </div>
-    </div>
-
-{% endblock %}
 
 
 {# on créer le code javasript permettant de créer les formulaires d'ajout d'image en temps réel #}
 {% block javascripts %}
 
-<script>
-
-$('#add-image').click(function(){
-
-// Je récupère le numéro des futurs champs que je vais créer
-// le + permet de transformer en nombre le résultat
-const index = +$('#widgets-counter').val();
-
-// Je récupère le prototype des entrées
-const tmpl = $('#ad_images').data('prototype').replace(/__name__/g, index);
-
-
-// J'injecte ce code au sein de la DIV
-$('#ad_images').append(tmpl);
-
-// ajoute un +1 à chaque ajout de champ de formulaire d'ajout d'image
-$('#widgets-counter').val(index + 1)
-
-
-// gestion du button "delete
-    handleDeleteButtons();
-
-});
-
-// function qui permet de gérer la suppression de l'image
-function handleDeleteButtons() {
-
-    $('button[data-action="delete"]').click(function(){
-        const target = this.dataset.target;
-        $(target).remove();
-    });
-
-
-    }
-</script>
-
-
+<script src="/js/ad.js"></script>
 
 {% endblock %}
 
